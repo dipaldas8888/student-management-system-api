@@ -6,10 +6,12 @@ import lombok.Getter;
 import lombok.Setter;
 
 import java.time.LocalDate;
+
 @Getter
 @Setter
 @AllArgsConstructor
 @Entity
+@Table(name = "student")
 public class Student {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -21,11 +23,14 @@ public class Student {
     private String email;
     @Column(unique = true,nullable = false)
     private String phone;
+
     @Column(name = "date_of_birth")
     private LocalDate dateofBirth;
 
+    @Column(name = "student_status")
     private boolean studentStatus;
 
+    @Column(name = "class_id")
     private int classId;
 
     @Enumerated(EnumType.STRING)

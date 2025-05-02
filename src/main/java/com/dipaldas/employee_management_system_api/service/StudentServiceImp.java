@@ -1,7 +1,11 @@
 package com.dipaldas.employee_management_system_api.service;
 
+import com.dipaldas.employee_management_system_api.dto.StudentFilterDTO;
 import com.dipaldas.employee_management_system_api.entity.Student;
 import com.dipaldas.employee_management_system_api.repository.StudentRepository;
+import com.dipaldas.employee_management_system_api.specification.StudentSpecification;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -9,6 +13,8 @@ import java.util.List;
 
 @Service
 public class StudentServiceImp implements StudentService {
+
+    private static final Logger log= LoggerFactory.getLogger(StudentServiceImp.class);
 
     @Autowired
     private StudentRepository studentRepository;
@@ -44,5 +50,16 @@ public class StudentServiceImp implements StudentService {
     @Override
     public void deleteStudent(long id) {
         studentRepository.deleteById(id);
+    }
+    public List<Student> filterStudents(StudentFilterDTO filterDTO) {
+        log.debug("Filtering students with criteria: {}", filterDTO);
+        System.out.printf("Filtering students with criteria: %s%n", filterDTO);
+        return studentRepository.findAll(StudentSpecification.filterByCriteria(
+                filterDTO.getName(),
+                filterDTO.getEmail(),
+                filterDTO.getStudentStatus(),
+                filterDTO.getClassId(),
+                filterDTO.getDateOfBirth()
+        ));
     }
 }
