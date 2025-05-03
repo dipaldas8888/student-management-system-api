@@ -4,6 +4,9 @@ import com.dipaldas.employee_management_system_api.dto.StudentFilterDTO;
 import com.dipaldas.employee_management_system_api.entity.Student;
 import com.dipaldas.employee_management_system_api.service.StudentService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDate;
@@ -17,10 +20,13 @@ public class StudentController {
     private StudentService studentService;
 
     @GetMapping
-    public List<Student> getAllStudents() {
-        return studentService.getAllStudents();
+    public Page<Student> getAllStudents(
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "3") int size
+    ) {
+        Pageable pageable = PageRequest.of(page, size);
+        return studentService.getAllStudents(pageable);
     }
-
     @GetMapping("/{id}")
     public Student getStudentById(@PathVariable long id) {
         return studentService.getStudentById(id);
